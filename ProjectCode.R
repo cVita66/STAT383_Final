@@ -13,7 +13,7 @@
 # Access to ggplot data visualization
 ##install.packages("ggplot2") 
 library(ggplot2)
-setwd("C:/Users/vcifo/Documents/STAT383_FInal")
+##setwd("C:/Users/___/Documents/STAT383_FInal")  <-- Unqiue per user
 
 # Clean Console and Environment
 rm(list = ls())
