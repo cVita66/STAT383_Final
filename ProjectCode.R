@@ -11,15 +11,16 @@
 ################################################################################
 
 # Access to ggplot data visualization
-##install.packages("ggplot2") 
+##install.packages("ggplot2")         // If ggplot2 not installed
 library(ggplot2)
-##setwd("C:/Users/___/Documents/STAT383_FInal")  <-- Unqiue per user
+##setwd("C:/Users/___/Documents/STAT383_Final")  <-- Unqiue per user
 
 # Clean Console and Environment
 rm(list = ls())
 cat("\f")
 
 #Access Dataset's
+##install.packages("readxl")          // If readxl not installed
 library(readxl)
 WineProperties_Red <- read_excel("RedWine_DataSet.xlsx")
 WineProperties_White <- read_excel("WhiteWine_DataSet.xlsx")
