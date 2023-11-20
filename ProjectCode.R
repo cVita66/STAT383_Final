@@ -2,6 +2,10 @@
 #
 #   Project: Linear Regression Analysis of ___________
 #   Author: Vincent Cifone
+#           Murdoch DeGray
+#           Amanda Polarolo
+#           Alexander Seeley
+#           Colin Gasiewicz
 #   Date: 11/14/23
 #   DataSet: WineQuality_Red
 #   
