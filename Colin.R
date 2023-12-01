@@ -1,14 +1,13 @@
 #Colin.R
 ##########################
-###Generation of 500 wines form RedWine_Dataset.xlxs
-#@Requires
-#"RedWine_Dataset.xlxs" must exist in the current working directory
-#@Returns 
-#redWineRandom: a sample of 500 random points of data
-#randomIndexes: the corresponding random indexes form WineProperties_Red 
-#Access Dataset's
-#@Dependencies
-##install.packages("readxl")          // If readxl not installed
+# Generation of 500 wines form RedWine_Dataset.xlxs
+## Requires
+### "RedWine_Dataset.xlxs" must exist in the current working directory
+## Returns 
+### redWineRandom: a sample of 500 random points of data
+### randomIndexes: the corresponding random indexes form WineProperties_Red 
+## Dependencies
+### install.packages("readxl")          // If readxl not installed
 library(readxl)
 
 # Clean Console and Environment
@@ -26,6 +25,43 @@ randomIndexes <- sample(seq_len(nrow(WineProperties_Red)), 500, replace = FALSE)
 
 #Get random data from random index (can choose which data to set after ",")
 redWineRandom <- WineProperties_Red[randomIndexes, ]
+
+# Chlorides and Quality linear models
+## Requires
+### "redWineRandom" must exist
+## Returns 
+###
+## Dependencies
+### install.packages("ggplot2")         // If ggplot2 not installed
+library(ggplot2)
+
+# Creation of linear models -- chlorides VS quality) 
+QCl_lm <- lm(chlorides ~ quality , data = redWineRandom)
+print(summary(QCl_lm))
+
+# Scatter Plot: Chlorides Vs. Quality
+#ggplot(WineProperties_Red, aes(x=`chlorides`, y=quality)) +
+ # geom_point() +
+  #geom_smooth(method='lm', se=FALSE, color="blue") +
+  #facet_wrap(~quality) +
+  #theme_minimal() +
+  #labs(title="Red Wine: chlorides Vs. quality", x="Chlorides",y="Quality")
+plot(redWineRandom$chlorides, redWineRandom$quality, col = "blue",
+     main = "Chlorides vs Quality",
+     xlab = "Chlorides",
+     ylab = "Quality"
+     )
+abline(QCl_lm, col = "green")
+grid()
+
+
+
+
+
+
+
+
+
 ##########################
 ##End Colin.R
 
