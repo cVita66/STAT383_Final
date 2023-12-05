@@ -30,6 +30,10 @@ randomIndexes <- sample(seq_len(nrow(WineProperties_Red)), 200, replace = FALSE)
 redWineRandom <- WineProperties_Red[randomIndexes, ]
 #####
 
+
+#------------------------------------------------------------------------------------------------#
+#Total Sulfur Dioxide#
+
 # Creation of linear models -- Quality VS alcohol~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 red_alc_pH_sulphites_mlr <- lm(quality ~ alcohol + pH + `total sulfur dioxide`, data = redWineRandom)
 print(summary(red_alc_pH_sulphites_mlr))
@@ -55,4 +59,30 @@ ggplot(redWineRandom, aes(x=`total sulfur dioxide` , y=alcohol, col=pH)) +
   theme_minimal() +
   labs(title="Red Wine: Alcohol vs. Sulphites", x="Sulphites",y="Alcohol")
 
+#------------------------------------------------------------------------------------------------#
+#Free Sulfur Dioxide#
 
+# Creation of linear models -- Quality VS alcohol~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+red_alc_pH_sulphites_mlr <- lm(quality ~ alcohol + pH + `free sulfur dioxide`, data = redWineRandom)
+print(summary(red_alc_pH_sulphites_mlr))
+
+# Scatter Plot: Alcohol Vs. Free Sulphites
+ggplot(redWineRandom, aes(x=`free sulfur dioxide` , y=alcohol, col=quality)) +
+  geom_point(aes(size=pH)) +
+  geom_smooth(method='lm', se=FALSE, color="red") +
+  theme_minimal() +
+  labs(title="Red Wine: Alcohol vs. Free Sulphites", x="Sulphites",y="Alcohol")
+
+# Scatter Plot: Alcohol Vs. Free Sulphites
+ggplot(redWineRandom, aes(x=quality , y=pH, col=alcohol)) +
+  geom_point(aes(size=`free sulfur dioxide`)) +
+  theme_minimal() +
+  labs(title="Red Wine: Quality vs. pH", x="Sulphites",y="Alcohol")
+
+# Scatter Plot: Alcohol Vs. Free Sulphites
+ggplot(redWineRandom, aes(x=`free sulfur dioxide` , y=alcohol, col=pH)) +
+  geom_point() +
+  geom_smooth(method='lm', se=FALSE, color="red") +
+  facet_wrap(~quality) +
+  theme_minimal() +
+  labs(title="Red Wine: Alcohol vs. Sulphites", x="Sulphites",y="Alcohol")
