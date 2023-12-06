@@ -25,66 +25,88 @@ WineProperties_Red <- read_excel("RedWine_DataSet.xlsx")
 set.seed(5678)
 
 #Find indexes of the 500 random elements
-randomIndexes <- sample(seq_len(nrow(WineProperties_Red)), 200, replace = FALSE)
+randomIndexes <- sample(seq_len(nrow(WineProperties_Red)), 2000, replace = FALSE)
 
 #Get random data from random index (can choose which data to set after ",")
 redWineRandom <- WineProperties_Red[randomIndexes, ]
 
+###### Creation of specialized datasets 
+
 # New comlumn to identify high quality wines
 redWineRandom$HighQuality <- as.factor(ifelse(redWineRandom$quality > median(redWineRandom$quality), 1, 0))
+#New column of Wines within pH range
+redWineRandom$InpHRange <- as.factor(ifelse(redWineRandom$pH > 3.2 & redWineRandom$pH < 3.4, 1,0 ))
+#New column of Wines within Chloride range
+redWineRandom$InChlRange <- as.factor(ifelse(redWineRandom$chlorides > 0.02 & redWineRandom$chlorides < 0.05, 1,0 ))
 
-highQualityWine <- redWineRandom[redWineRandom$HighQuality != 0,]
-lowQualityWine <- redWineRandom[redWineRandom$HighQuality == 0,]
+# High Quality
+hQ_Wine <- redWineRandom[redWineRandom$HighQuality != 0,]
+# Within Chloride Range
+hQ_cl_Wine <- hQ_Wine[hQ_Wine$InChlRange != 0,]
+# Within ph Range
+hQ_cl_pH_Wine <- hQ_cl_Wine[hQ_cl_Wine$InpHRange != 0,]
 
-# Creation of linear models -- Quality w/ Alcohol  from High Quality Wines
-hq_alc_lr <- lm(quality ~ alcohol, data = highQualityWine)
-print(summary(hq_alc_lr))
-
-# Creation of linear models -- Quality w/ Alcohol  from Low Quality Wines
-lq_alc_lr <- lm(quality ~ alcohol , data = lowQualityWine)
-print(summary(lq_alc_lr))
-
-# Creation of linear models -- Quality w/ Sugar  from High Quality Wines
-hq_sug_lr <- lm(quality ~ `residual sugar`, data = highQualityWine)
-print(summary(hq_sug_lr))
-
-# Creation of linear models -- Quality w/ Sugar  from Low Quality Wines
-lq_sug_lr <- lm(quality ~ `residual sugar` , data = lowQualityWine)
-print(summary(lq_sug_lr))
-
-# Creation of linear models -- Quality w/ pH  from High Quality Wines
-hq_pH_lr <- lm(quality ~ pH, data = highQualityWine)
-print(summary(hq_pH_lr))
-
-# Creation of linear models -- Quality w/ pH  from Low Quality Wines
-lq_pH_lr <- lm(quality ~ pH , data = lowQualityWine)
-print(summary(lq_pH_lr))
-
-# Creation of linear models -- Quality w/ Alcohol, pH  from High Quality Wines
-hq_alc_pH_mlr <- lm(quality ~ alcohol + pH , data = highQualityWine)
-print(summary(hq_alc_pH_mlr))
-
-# Creation of linear models -- Quality w/ Alcohol, pH  from Low Quality Wines
-lq_alc_pH_mlr <- lm(quality ~ alcohol + pH , data = lowQualityWine)
-print(summary(lq_alc_pH_mlr))
-
-# Creation of linear models -- Quality w/ Alcohol, pH and Sugar from High Quality Wines
-hq_alc_pH_sugar_mlr <- lm(quality ~ alcohol + pH + `residual sugar`, data = highQualityWine)
-print(summary(hq_alc_pH_sugar_mlr))
-
-# Creation of linear models -- Quality w/ Alcohol, pH and Sugar from low Quality Wines
-lq_alc_pH_sugar_mlr <- lm(quality ~ alcohol + pH + `residual sugar`, data = lowQualityWine)
-print(summary(lq_alc_pH_sugar_mlr))
-
-
+###### Creation of linear models and graphs
+##-- Quality (High) w/ pH and chlorides within respective ranges
+hq_cl_pH_lm <- lm(quality ~ pH + chlorides, data = hQ_cl_pH_Wine)
+print(summary(hq_cl_pH_lm))
 
 
 # Scatter Plot: Alcohol Vs. Sugar in High Quality Wines
-ggplot(highQualityWine, aes(x=`residual sugar` , y=alcohol)) +
-  geom_point(aes(size=pH)) +
+ggplot(hQ_cl_pH_Wine, aes(x=pH , y=chlorides)) +
+  geom_point() +
   geom_smooth(method='lm', se=FALSE, color="blue") +
+  facet_wrap(~quality) +
   theme_minimal() +
-  labs(title="Red Wine: Alcohol vs. Sugar", x="Sugar",y="Alcohol")
+  labs(title="Red Wine: Chlorides vs. pH Per Quality", x="pH",y="Chlorides")
+
+
+
+###### Creation of linear models and graphs
+##-- Quality (High) w/ pH and chlorides within respective ranges
+hq_lm <- lm(quality ~ pH + chlorides, data = hQ_Wine)
+print(summary(hq_lm))
+
+
+# Scatter Plot: Alcohol Vs. Sugar in High Quality Wines
+ggplot(hQ_Wine, aes(x=pH , y=chlorides)) +
+  geom_point() +
+  geom_smooth(method='lm', se=FALSE, color="blue") +
+  facet_wrap(~quality) +
+  theme_minimal() +
+  labs(title="Red Wine: Chlorides vs. pH Per Quality", x="pH",y="Chlorides")
+
+
+
+###### Creation of linear models and graphs
+##-- Quality (High) w/ pH and chlorides within respective ranges
+hq_lm <- lm(quality ~ pH + chlorides, data = redWineRandom)
+print(summary(hq_lm))
+
+
+# Scatter Plot: Alcohol Vs. Sugar in High Quality Wines
+ggplot(redWineRandom, aes(x=pH , y=chlorides)) +
+  geom_point() +
+  geom_smooth(method='lm', se=FALSE, color="blue") +
+  facet_wrap(~quality) +
+  theme_minimal() +
+  labs(title="Red Wine: Chlorides vs. pH Per Quality", x="pH",y="Chlorides")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # Scatter Plot: Alcohol Vs. pH~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
