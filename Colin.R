@@ -40,12 +40,21 @@ QCl_lm <- lm(chlorides ~ quality , data = redWineRandom)
 print(summary(QCl_lm))
 
 # Scatter Plot: Chlorides Vs. Quality
-ggplot(WineProperties_Red, aes(x=`chlorides`, y=quality)) +
-  geom_point() +
-  geom_smooth(method='lm', se=FALSE, color="blue") +
-  facet_wrap(~quality) +
-  theme_minimal() +
-  labs(title="Red Wine: chlorides Vs. quality", x="Chlorides",y="Quality")
+#ggplot(WineProperties_Red, aes(x=`chlorides`, y=quality)) +
+ # geom_point() +
+  #geom_smooth(method='lm', se=FALSE, color="blue") +
+  #facet_wrap(~quality) +
+  #theme_minimal() +
+  #labs(title="Red Wine: chlorides Vs. quality", x="Chlorides",y="Quality")
+plot(redWineRandom$chlorides, redWineRandom$quality, col = "blue",
+     main = "Chlorides vs Quality",
+     xlab = "Chlorides",
+     ylab = "Quality"
+     )
+abline(QCl_lm, col = "green")
+grid()
+
+
 
 
 
