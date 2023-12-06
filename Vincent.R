@@ -25,39 +25,117 @@ WineProperties_Red <- read_excel("RedWine_DataSet.xlsx")
 set.seed(5678)
 
 #Find indexes of the 500 random elements
-randomIndexes <- sample(seq_len(nrow(WineProperties_Red)), 200, replace = FALSE)
+randomIndexes <- sample(seq_len(nrow(WineProperties_Red)), 2000, replace = FALSE)
 
 #Get random data from random index (can choose which data to set after ",")
 redWineRandom <- WineProperties_Red[randomIndexes, ]
-#####
 
-# Creation of linear models -- Quality VS alcohol~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-red_alc_pH_sugar_mlr <- lm(quality ~ alcohol + pH + `residual sugar`, data = redWineRandom)
-print(summary(red_alc_pH_sugar_mlr))
+###### Creation of specialized datasets 
 
-# Scatter Plot: Alcohol Vs. Sugar
-ggplot(redWineRandom, aes(x=`residual sugar` , y=alcohol, col=quality)) +
+# New comlumn to identify high quality wines
+redWineRandom$HighQuality <- as.factor(ifelse(redWineRandom$quality > median(redWineRandom$quality), 1, 0))
+#New column of Wines within pH range
+redWineRandom$InpHRange <- as.factor(ifelse(redWineRandom$pH > 3.2 & redWineRandom$pH < 3.4, 1,0 ))
+#New column of Wines within Chloride range
+redWineRandom$InChlRange <- as.factor(ifelse(redWineRandom$chlorides > 0.02 & redWineRandom$chlorides < 0.05, 1,0 ))
+
+# High Quality
+hQ_Wine <- redWineRandom[redWineRandom$HighQuality != 0,]
+# Within Chloride Range
+hQ_cl_Wine <- hQ_Wine[hQ_Wine$InChlRange != 0,]
+# Within ph Range
+hQ_cl_pH_Wine <- hQ_cl_Wine[hQ_cl_Wine$InpHRange != 0,]
+
+###### Creation of linear models and graphs
+##-- Quality (High) w/ pH and chlorides within respective ranges
+hq_cl_pH_lm <- lm(quality ~ pH + chlorides, data = hQ_cl_pH_Wine)
+print(summary(hq_cl_pH_lm))
+
+
+# Scatter Plot: Alcohol Vs. Sugar in High Quality Wines
+ggplot(hQ_cl_pH_Wine, aes(x=pH , y=chlorides)) +
+  geom_point() +
+  geom_smooth(method='lm', se=FALSE, color="blue") +
+  facet_wrap(~quality) +
+  theme_minimal() +
+  labs(title="Red Wine: Chlorides vs. pH Per Quality", x="pH",y="Chlorides")
+
+
+
+###### Creation of linear models and graphs
+##-- Quality (High) w/ pH and chlorides within respective ranges
+hq_lm <- lm(quality ~ pH + chlorides, data = hQ_Wine)
+print(summary(hq_lm))
+
+
+# Scatter Plot: Alcohol Vs. Sugar in High Quality Wines
+ggplot(hQ_Wine, aes(x=pH , y=chlorides)) +
+  geom_point() +
+  geom_smooth(method='lm', se=FALSE, color="blue") +
+  facet_wrap(~quality) +
+  theme_minimal() +
+  labs(title="Red Wine: Chlorides vs. pH Per Quality", x="pH",y="Chlorides")
+
+
+
+###### Creation of linear models and graphs
+##-- Quality (High) w/ pH and chlorides within respective ranges
+hq_lm <- lm(quality ~ pH + chlorides, data = redWineRandom)
+print(summary(hq_lm))
+
+
+# Scatter Plot: Alcohol Vs. Sugar in High Quality Wines
+ggplot(redWineRandom, aes(x=pH , y=chlorides)) +
+  geom_point() +
+  geom_smooth(method='lm', se=FALSE, color="blue") +
+  facet_wrap(~quality) +
+  theme_minimal() +
+  labs(title="Red Wine: Chlorides vs. pH Per Quality", x="pH",y="Chlorides")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Scatter Plot: Alcohol Vs. pH~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ggplot(highQualityWine, aes(x=pH , y=alcohol, color = `residual sugar`)) +
+  geom_point() +
+  geom_smooth(method='lm', se=FALSE, color="blue") +
+  theme_minimal() +
+  labs(title="Red Wine: Alcohol vs. pH", x="pH",y="Alcohol")
+
+
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Scatter Plot: Alcohol Vs. Sugar in High Quality Wines
+ggplot(redWineRandom, aes(x=`residual sugar` , y=alcohol, col=HighQuality)) +
   geom_point(aes(size=pH)) +
   geom_smooth(method='lm', se=FALSE, color="blue") +
   theme_minimal() +
   labs(title="Red Wine: Alcohol vs. Sugar", x="Sugar",y="Alcohol")
 
-# Scatter Plot: Alcohol Vs. Sugar
-ggplot(redWineRandom, aes(x=quality , y=pH, col=alcohol)) +
-  geom_point(aes(size=`residual sugar`)) +
-  theme_minimal() +
-  labs(title="Red Wine: Quality vs. pH", x="Sugar",y="Alcohol")
 
 # Scatter Plot: Alcohol Vs. Sugar
-ggplot(redWineRandom, aes(x=`residual sugar` , y=alcohol, col=pH)) +
-  geom_point() +
+ggplot(redWineRandom, aes(x=`residual sugar` , y=pH)) +
+  geom_point(aes(size=HighQuality)) +
   geom_smooth(method='lm', se=FALSE, color="blue") +
-  facet_wrap(~quality) +
+  facet_wrap(~HighQuality) +
   theme_minimal() +
-  labs(title="Red Wine: Alcohol vs. Sugar", x="Sugar",y="Alcohol")
-
-
-
+  labs(title="Red Wine: Sugar vs. pH", x="Sugar",y="pH")
 
 
 
