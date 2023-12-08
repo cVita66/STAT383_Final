@@ -27,40 +27,20 @@ randomIndexes <- sample(seq_len(nrow(WineProperties_Red)), 500, replace = FALSE)
 redWineRandom <- WineProperties_Red[randomIndexes, ]
 
 # Chlorides and Quality linear models
-## Requires
-### "redWineRandom" must exist
-## Returns 
-###
-## Dependencies
-### install.packages("ggplot2")         // If ggplot2 not installed
 library(ggplot2)
 
+redWine <- subset(redWineRandom, chlorides > 0.15)
+
 # Creation of linear models -- chlorides VS quality) 
-QCl_lm <- lm(chlorides ~ quality , data = redWineRandom)
+QCl_lm <- lm(quality ~ chlorides + alcohol , data = redWine)
+
 print(summary(QCl_lm))
-
-# Scatter Plot: Chlorides Vs. Quality
-#ggplot(WineProperties_Red, aes(x=`chlorides`, y=quality)) +
- # geom_point() +
-  #geom_smooth(method='lm', se=FALSE, color="blue") +
-  #facet_wrap(~quality) +
-  #theme_minimal() +
-  #labs(title="Red Wine: chlorides Vs. quality", x="Chlorides",y="Quality")
-plot(redWineRandom$chlorides, redWineRandom$quality, col = "blue",
-     main = "Chlorides vs Quality",
-     xlab = "Chlorides",
-     ylab = "Quality"
-     )
-abline(QCl_lm, col = "green")
+ggplot(redWineRandom, aes(x = chlorides, y = quality)) + 
+  geom_point(aes(size = alcohol), alpha = 0.15, color = "black") +
+  geom_smooth(method = "lm", se = FALSE, linetype = "solid", color = "blue") +
+  labs(title = "Chlorides vs Quality vs. Alcohol", x = "Chlorides", y = "Quality") +
+  theme_minimal() 
 grid()
-
-
-
-
-
-
-
-
 
 ##########################
 ##End Colin.R
