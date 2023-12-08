@@ -13,8 +13,6 @@ library(ggplot2)
 ##install.packages("readxl")          // If readxl not installed
 library(readxl)
 
-library(broom)
-library(dplyr)
 ##install.packages("flextable")       
 library(flextable)
 
@@ -52,13 +50,26 @@ hQ_clLimit_pHLimit_Wine <- hQ_clLimit_Wine[hQ_clLimit_Wine$InpHRange != 0,]
 q_ph_chlor_mlm <- lm(quality ~ pH + chlorides, data = redWineRandom)
 
 
-# Scatter Plot: Alcohol Vs. Sugar in All Quality Wines
-ggplot(redWineRandom, aes(x=pH , y=chlorides, color=quality)) +
-  geom_point(fill="lightblue", stroke=1, alpha = 0.5)+
+# Scatter Plot: Quality Vs. Chlorides with feature pH by color
+ggplot(redWineRandom, aes(x=chlorides , y=quality, color=pH)) +
+  geom_point( stroke=3, alpha = 0.5)+
   geom_smooth(method='lm', se=FALSE, color="blue") +
-  #facet_wrap(~quality) +
   theme_minimal() +
-  labs( x="pH %",y="Chlorides %")
+  labs( x="Chloride Concentration",y="Quality")
+
+# Scatter Plot: Quality Vs. Chlorides
+ggplot(redWineRandom, aes(x=chlorides , y=quality)) +
+  geom_point( stroke=3, alpha = 0.5, color = "lightblue")+
+  geom_smooth(method='lm', se=FALSE, color="blue") +
+  theme_minimal() +
+  labs( x="Chloride Concentration",y="Quality")
+
+# Scatter Plot: Quality Vs. pH 
+ggplot(redWineRandom, aes(x=pH , y=quality)) +
+  geom_point(stroke=3, alpha = 0.5, color = "lightblue")+
+  geom_smooth(method='lm', se=FALSE, color="blue") +
+  theme_minimal() +
+  labs( x="pH Levels",y="Quality")
 
 
 ###### Creation of linear models and graphs
@@ -73,6 +84,20 @@ ggplot(hQ_clLimit_pHLimit_Wine, aes(x=pH , y=chlorides, color=quality)) +
   #facet_wrap(~quality) +
   theme_minimal() +
   labs( x="pH %",y="Chlorides %")
+
+# Scatter Plot: Quality Vs. Chlorides
+ggplot(hQ_clLimit_pHLimit_Wine, aes(x=chlorides , y=quality)) +
+  geom_point( stroke=3, alpha = 0.5, color = "lightblue")+
+  geom_smooth(method='lm', se=FALSE, color="blue") +
+  theme_minimal() +
+  labs( x="Chloride Concentration",y="Quality")
+
+# Scatter Plot: Quality Vs. pH 
+ggplot(hQ_clLimit_pHLimit_Wine, aes(x=pH , y=quality)) +
+  geom_point(stroke=3, alpha = 0.5, color = "lightblue")+
+  geom_smooth(method='lm', se=FALSE, color="blue") +
+  theme_minimal() +
+  labs( x="pH Levels",y="Quality")
 
 
 # Summary of the linear models
