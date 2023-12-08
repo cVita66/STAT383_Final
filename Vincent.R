@@ -15,7 +15,7 @@ library(readxl)
 
 library(broom)
 library(dplyr)
-install.packages("flextable")
+##install.packages("flextable")       
 library(flextable)
 
 # Clean Console and Environment
@@ -80,18 +80,11 @@ print(summary(q_ph_chlor_mlm))
 print(summary(q_pHL_chlorL_mlm))
 
 # Tables for the linear models
-glance_results <- glance(q_ph_chlor_mlm)
-no_limit_pH_Cl_table <- as.data.frame(coef(summary(q_ph_chlor_mlm)))
-no_limit_pH_Cl_table <- select(no_limit_pH_Cl_table,`Pr(>|t|)`)
-no_limit_pH_Cl_table <- cbind(no_limit_pH_Cl_table, R2 = glance_results$r.squared, adj_R2 = glance_results$adj.r.squared)
-flextable(no_limit_pH_Cl_table)
+no_limit_pH_Cl_table <- as_flextable(q_ph_chlor_mlm)
+print(no_limit_pH_Cl_table)
 
-glance_results <- glance(q_pHL_chlorL_mlm)
-limit_pH_Cl_table <- as.data.frame(coef(summary(q_pHL_chlorL_mlm)))
-limit_pH_Cl_table <- select(limit_pH_Cl_table,`Pr(>|t|)`)
-limit_pH_Cl_table <- cbind(limit_pH_Cl_table, R2 = glance_results$r.squared, adj_R2 = glance_results$adj.r.squared)
-
-flextable(limit_pH_Cl_table)
+limit_pH_Cl_table <- as_flextable(q_pHL_chlorL_mlm)
+print(limit_pH_Cl_table)
 
 
 
