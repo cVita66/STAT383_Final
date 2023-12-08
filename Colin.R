@@ -39,7 +39,7 @@ QCl_lm <- lm(quality ~ chlorides + alcohol , data = redWine)
 
 print(summary(QCl_lm))
 ggplot(redWine, aes(x = chlorides, y = quality)) + 
-  geom_point(aes(size = alcohol), alpha = 0.4, color = "lightblue") +
+  geom_point(aes(size = alcohol), alpha = 0.15, color = "lightblue") +
   geom_smooth(method = "lm", se = FALSE, linetype = "solid", color = "blue") +
   labs(title = "Chlorides vs Quality vs. Alcohol", x = "Chlorides", y = "Quality") +
   theme_minimal() 
