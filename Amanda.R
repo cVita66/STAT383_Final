@@ -3,7 +3,7 @@
 ##########################
 ###Creation of a Multi-linear model for Alcohol, pH and Sulphites with respect to Quality
 
-setwd("C:/Users/Amanda/Documents/GitHub/STAT383_Final")  
+#setwd("C:/Users/Amanda/Documents/GitHub/STAT383_Final")  
 # Access to ggplot data visualization
 install.packages("ggplot2")         
 library(ggplot2)
@@ -101,12 +101,16 @@ red_sug_chlor_quality_mlr <- lm(quality ~ `residual sugar` + chlorides, data = r
 print(summary(red_sug_chlor_quality_mlr))
 
 # Scatter Plot: Sugar, chlorides, quality
-ggplot(redWineRandom, aes(x=`residual sugar` , y=chlorides)) +
-  geom_point() +
-  geom_smooth(method='lm', se=FALSE, color="red") +
-  facet_wrap(~quality) +
-  theme_minimal() +
-  labs(title="Red Wine: Quality vs Sugar + Chlorides", x="Sugar",y="Chlorides")
+ggplot(redWineRandom, aes(x=`residual sugar` , y=quality)) +
+  geom_point(stroke=3, alpha = 0.5, color = "lightblue") +
+  geom_smooth(method='lm', se=FALSE, color="blue") +
+  theme_minimal() 
 
-table <- as_flextable(red_sug_chlor_quality_mlr)
+# Scatter Plot: Sugar, chlorides, quality
+ggplot(redWineRandom, aes(x=chlorides , y=quality)) +
+  geom_point(stroke=3, alpha = 0.5, color = "lightblue") +
+  geom_smooth(method='lm', se=FALSE, color="blue") +
+  theme_minimal() 
+
+ table <- as_flextable(red_sug_chlor_quality_mlr)
 print(table)
