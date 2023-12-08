@@ -9,6 +9,7 @@
 ## Dependencies
 ### install.packages("readxl")          // If readxl not installed
 library(readxl)
+
 library(flextable)
 library(vctrs)
 library(broom)
@@ -32,12 +33,15 @@ redWineRandom <- WineProperties_Red[randomIndexes, ]
 # Chlorides and Quality linear models
 library(ggplot2)
 
+
 redWine <- subset(redWineRandom, chlorides < 0.15)
+
 
 # Creation of linear models -- chlorides VS quality) 
 QCl_lm <- lm(quality ~ chlorides + alcohol , data = redWine)
 
 print(summary(QCl_lm))
+
 ggplot(redWine, aes(x = chlorides, y = quality)) + 
   geom_point(aes(size = alcohol), alpha = 0.15, color = "black") +
   geom_smooth(method = "lm", se = FALSE, linetype = "solid", color = "blue") +
@@ -49,6 +53,7 @@ grid()
 ##install.packages("flextable")
 table <- as_flextable(QCl_lm)
 print(table)
+
 
 ##########################
 ##End Colin.R
