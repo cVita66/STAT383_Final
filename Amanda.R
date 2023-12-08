@@ -11,6 +11,10 @@ library(ggplot2)
 #Access Dataset's
 install.packages("readxl")         
 library(readxl)
+library(broom)
+library(dplyr)
+install.packages("flextable")       
+library(flextable)
 
 # Clean Console and Environment
 rm(list = ls())
@@ -28,7 +32,8 @@ randomIndexes <- sample(seq_len(nrow(WineProperties_Red)), 200, replace = FALSE)
 
 #Get random data from random index (can choose which data to set after ",")
 redWineRandom <- WineProperties_Red[randomIndexes, ]
-#####
+
+
 
 
 #------------------------------------------------------------------------------------------------#
@@ -86,3 +91,22 @@ ggplot(redWineRandom, aes(x=`free sulfur dioxide` , y=alcohol, col=pH)) +
   facet_wrap(~quality) +
   theme_minimal() +
   labs(title="Red Wine: Alcohol vs. Sulphites", x="Sulphites",y="Alcohol")
+
+#------------------------------------------------------------------------------------------------#
+
+######Sugar, Chlorides and Quality#
+
+# Creation of linear models -- Quality VS sugar and chlorides~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+red_sug_chlor_quality_mlr <- lm(quality ~ `residual sugar` + chlorides, data = redWineRandom)
+print(summary(red_sug_chlor_quality_mlr))
+
+# Scatter Plot: Sugar, chlorides, quality
+ggplot(redWineRandom, aes(x=`residual sugar` , y=chlorides)) +
+  geom_point() +
+  geom_smooth(method='lm', se=FALSE, color="red") +
+  facet_wrap(~quality) +
+  theme_minimal() +
+  labs(title="Red Wine: Quality vs Sugar + Chlorides", x="Sugar",y="Chlorides")
+
+table <- as_flextable(red_sug_chlor_quality_mlr)
+print(table)
