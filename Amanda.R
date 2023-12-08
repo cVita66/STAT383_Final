@@ -11,6 +11,10 @@ library(ggplot2)
 #Access Dataset's
 install.packages("readxl")         
 library(readxl)
+library(broom)
+library(dplyr)
+install.packages("flextable")       
+library(flextable)
 
 # Clean Console and Environment
 rm(list = ls())
@@ -92,7 +96,7 @@ ggplot(redWineRandom, aes(x=`free sulfur dioxide` , y=alcohol, col=pH)) +
 
 ######Sugar, Chlorides and Quality#
 
-# Creation of linear models -- Quality VS alcohol~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Creation of linear models -- Quality VS sugar and chlorides~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 red_sug_chlor_quality_mlr <- lm(quality ~ `residual sugar` + chlorides, data = redWineRandom)
 print(summary(red_sug_chlor_quality_mlr))
 
@@ -104,3 +108,5 @@ ggplot(redWineRandom, aes(x=`residual sugar` , y=chlorides)) +
   theme_minimal() +
   labs(title="Red Wine: Quality vs Sugar + Chlorides", x="Sugar",y="Chlorides")
 
+table <- as_flextable(red_sug_chlor_quality_mlr)
+print(table)
