@@ -17,13 +17,11 @@ setwd("C:/Users/"USER"/Documents/STAT383_Final")
 ```
 replace the "USER" with your computer's username in the terminal to
 ## Dependencies 
-ggplot2, readxl, flextable, vctrs, broom
+ggplot2, readxl, flextable
 easy copy paste to install all necessary dependencies
 ```
 install.packages("ggplot2")
 install.packages("readxl")
 install.packages("flextable")
-install.packages("vctrs")
-install.packages("broom")
 ```
 
