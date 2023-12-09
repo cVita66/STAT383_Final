@@ -4,7 +4,7 @@ The Qualification of Wine Contingent to Chemical Properties
 ## Authors
 Vincent Cifone, Shiloh Degray, Colin Gasiewicz, Amanda Polarolo, Alexander Seeley
 ## Description
-This code models the relationships between Quality vs. pH, Quality vs. Alcohol and Chlorides, and Quality vs. pH and Free Sulfur Dioxides with linear models.
+This code models the relationships between Quality vs. pH and Chlorides, Quality vs. Alcohol and Chlorides, Quality vs. pH and Free Sulfur Dioxides, Quality vs. Sugar and Chlorides with linear models.
 
 The corresponding report for this repository can be found [here](https://docs.google.com/document/d/1sOKuDMC33Faa35nVzSbotYwt0hevsd0j9ZoYJ9-daWk/edit?usp=sharing).
 
