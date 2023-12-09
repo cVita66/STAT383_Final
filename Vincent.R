@@ -33,22 +33,13 @@ randomIndexes <- sample(seq_len(nrow(WineProperties_Red)), 500, replace = FALSE)
 #Get random data from random index (can choose which data to set after ",")
 redWineRandom <- WineProperties_Red[randomIndexes, ]
 
-###### Creation of specialized datasets 
-
-#New column of Wines within pH range
-redWineRandom$InpHRange <- as.factor(ifelse(redWineRandom$pH > 3.2 & redWineRandom$pH < 3.4, 1,0 ))
-#New column of Wines within Chloride range
-redWineRandom$InChlRange <- as.factor(ifelse(redWineRandom$chlorides > 0.02 & redWineRandom$chlorides < 0.05, 1,0 ))
-
 # With Limited Chloride Range
 hQ_clLimit_Wine <- redWineRandom[redWineRandom$InChlRange != 0,]
-# Within ph Range
-hQ_clLimit_pHLimit_Wine <- hQ_clLimit_Wine[hQ_clLimit_Wine$InpHRange != 0,]
-
 ###### Creation of linear models and graphs
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##-- Quality w/ pH and chlorides within respective ranges
 q_ph_chlor_mlm <- lm(quality ~ pH + chlorides, data = redWineRandom)
-
 
 # Scatter Plot: Quality Vs. Chlorides with feature pH by color
 ggplot(redWineRandom, aes(x=chlorides , y=quality, color=pH)) +
@@ -71,45 +62,42 @@ ggplot(redWineRandom, aes(x=pH , y=quality)) +
   theme_minimal() +
   labs( x="pH Levels",y="Quality")
 
+# Summary of the linear models
+print(summary(q_ph_chlor_mlm))
 
-###### Creation of linear models and graphs
-##-- Quality (High) w/ pH and chlorides within respective ranges
-q_pHL_chlorL_mlm <- lm(quality ~ pH + chlorides, data = hQ_clLimit_pHLimit_Wine)
+# Tables for the linear models
+pH_Cl_table <- as_flextable(q_ph_chlor_mlm)
+print(pH_Cl_table)
 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##-- Quality w/ pH and sulfites within respective ranges
+q_ph_freeSulf_mlm <- lm(quality ~ pH + `free sulfur dioxide`, data = redWineRandom)
 
-# Scatter Plot: Alcohol Vs. Sugar in High Quality Wines
-ggplot(hQ_clLimit_pHLimit_Wine, aes(x=pH , y=chlorides, color=quality)) +
-  geom_point(fill="lightblue", stroke=1, alpha = 0.5)+
+# Scatter Plot: Quality Vs. Sulfites with feature pH by color
+ggplot(redWineRandom, aes(x=`free sulfur dioxide` , y=quality, color=pH)) +
+  geom_point( stroke=3, alpha = 0.5)+
   geom_smooth(method='lm', se=FALSE, color="blue") +
-  #facet_wrap(~quality) +
   theme_minimal() +
-  labs( x="pH %",y="Chlorides %")
+  labs( x="Sulfite Content",y="Quality")
 
 # Scatter Plot: Quality Vs. Chlorides
-ggplot(hQ_clLimit_pHLimit_Wine, aes(x=chlorides , y=quality)) +
+ggplot(redWineRandom, aes(x=`free sulfur dioxide` , y=quality)) +
   geom_point( stroke=3, alpha = 0.5, color = "lightblue")+
   geom_smooth(method='lm', se=FALSE, color="blue") +
   theme_minimal() +
-  labs( x="Chloride Concentration",y="Quality")
-
-# Scatter Plot: Quality Vs. pH 
-ggplot(hQ_clLimit_pHLimit_Wine, aes(x=pH , y=quality)) +
-  geom_point(stroke=3, alpha = 0.5, color = "lightblue")+
-  geom_smooth(method='lm', se=FALSE, color="blue") +
-  theme_minimal() +
-  labs( x="pH Levels",y="Quality")
-
+  labs( x="Sulfite Content",y="Quality")
 
 # Summary of the linear models
-print(summary(q_ph_chlor_mlm))
-print(summary(q_pHL_chlorL_mlm))
+print(summary(q_ph_freeSulf_mlm))
 
 # Tables for the linear models
-no_limit_pH_Cl_table <- as_flextable(q_ph_chlor_mlm)
-print(no_limit_pH_Cl_table)
+pH_Sulf_table <- as_flextable(q_ph_freeSulf_mlm)
+print(pH_Sulf_table)
 
-limit_pH_Cl_table <- as_flextable(q_pHL_chlorL_mlm)
-print(limit_pH_Cl_table)
+
+
+
+
 
 
 
