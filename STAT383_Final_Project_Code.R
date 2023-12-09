@@ -11,6 +11,10 @@
 #   
 #   STAT383 Statistics and Probability Final Project
 #
+#   Note: To run code properly, must run "Source with Echo" to ensure graphs are
+#   produced and displayed under "Plots". If only "Source" is run, tables will
+#   still be produced under "Viewer".
+#
 #
 ################################################################################
 ##setwd("C:/Users/___/Documents/STAT383_Final")  <-- Unqiue per user
@@ -22,6 +26,7 @@ library(ggplot2)
 ##install.packages("readxl")          // If readxl not installed
 library(readxl)
 
+# Access to clean tables
 ##install.packages("flextable")       
 library(flextable)
 
